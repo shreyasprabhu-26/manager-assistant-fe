@@ -18,8 +18,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 // Pages
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ManagerAssist from "./pages/ManagerAssist";
-import SowToHld from "./pages/SowToHld";
+import ManagerAssist from "./apps/ManagerAssist";
+import SowToHld from "./apps/SowToHld";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
