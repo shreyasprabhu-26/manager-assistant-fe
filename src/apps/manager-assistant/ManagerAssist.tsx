@@ -24,6 +24,15 @@ import {
 import { useManagerAssistant } from "@/contexts/ManagerAssistantContext";
 
 export default function ManagerAssist() {
+  const navigate = useNavigate();
+  const { createProject } = useManagerAssistant();
+
+  const handleNewProject = () => {
+    // Create a new project with temporary data and redirect
+    const projectId = createProject("", "");
+    navigate(`/manager-assist/${projectId}`);
+  };
+
   // Mock project data
   const projects = [
     {
