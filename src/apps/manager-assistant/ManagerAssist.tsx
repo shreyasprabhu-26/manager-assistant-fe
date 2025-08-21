@@ -190,6 +190,7 @@ export default function ManagerAssist() {
                     variant="secondary"
                     size="sm"
                     className="flex items-center gap-1"
+                    onClick={() => navigate(`/manager-assist/${project.id}`)}
                   >
                     <span>Details</span>
                     <ChevronRight className="h-3 w-3" />
