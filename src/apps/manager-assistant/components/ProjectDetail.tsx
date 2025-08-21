@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useManagerAssistant } from '@/contexts/ManagerAssistantContext';
 import ProjectProgressBar from './ProjectProgressBar';
-import ProjectForm from './ProjectForm';
-import GoogleSheetInput from './GoogleSheetInput';
+import { stepRegistry, getStepByIndex, canNavigateToStep } from '../config/stepRegistry';
 
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -27,7 +26,7 @@ const ProjectDetail: React.FC = () => {
   }
 
   const handleStepClick = (step: number) => {
-    if (projectId) {
+    if (projectId && project && canNavigateToStep(projectId, step, project.currentStep)) {
       updateProject(projectId, { currentStep: step });
     }
   };
@@ -35,21 +34,21 @@ const ProjectDetail: React.FC = () => {
   const renderCurrentStep = () => {
     if (!project) return null;
 
-    switch (project.currentStep) {
-      case 1:
-        return <ProjectForm projectId={projectId} />;
-      case 2:
-        return <GoogleSheetInput projectId={projectId} />;
-      case 3:
-        return (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold mb-4">Review Sheet</h2>
-            <p className="text-muted-foreground">This step is coming soon...</p>
-          </div>
-        );
-      default:
-        return <ProjectForm projectId={projectId} />;
+    const currentStepConfig = getStepByIndex(project.currentStep);
+    
+    if (!currentStepConfig) {
+      return (
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-bold mb-4">Step Not Found</h2>
+          <p className="text-muted-foreground">
+            The requested step could not be found.
+          </p>
+        </div>
+      );
     }
+
+    const StepComponent = currentStepConfig.component;
+    return <StepComponent projectId={projectId} />;
   };
 
   return (
@@ -59,7 +58,8 @@ const ProjectDetail: React.FC = () => {
         <div className="bg-card border border-border rounded-xl shadow-sm">
           <ProjectProgressBar
             currentStep={project.currentStep}
-            totalSteps={project.totalSteps}
+            totalSteps={stepRegistry.totalSteps}
+            stepLabels={stepRegistry.stepLabels}
             onStepClick={handleStepClick}
           />
         </div>
