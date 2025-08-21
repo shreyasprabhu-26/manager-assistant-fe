@@ -101,6 +101,20 @@ export const ManagerAssistantProvider: React.FC<ManagerAssistantProviderProps> =
     return projects[projectId] || null;
   };
 
+  const nextStep = (projectId: string) => {
+    const project = projects[projectId];
+    if (project && project.currentStep < project.totalSteps) {
+      updateProject(projectId, { currentStep: project.currentStep + 1 });
+    }
+  };
+
+  const prevStep = (projectId: string) => {
+    const project = projects[projectId];
+    if (project && project.currentStep > 1) {
+      updateProject(projectId, { currentStep: project.currentStep - 1 });
+    }
+  };
+
   const value: ManagerAssistantContextType = {
     projects,
     currentProject,
@@ -108,6 +122,8 @@ export const ManagerAssistantProvider: React.FC<ManagerAssistantProviderProps> =
     updateProject,
     setCurrentProject,
     getCurrentProject,
+    nextStep,
+    prevStep,
   };
 
   return (
