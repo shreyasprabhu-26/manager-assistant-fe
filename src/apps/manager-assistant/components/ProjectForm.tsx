@@ -72,10 +72,10 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ projectId }) => {
           </div>
         </div>
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          {isEditing ? 'Edit Project' : 'Create New Project'}
+          Create New Project
         </h1>
         <p className="text-muted-foreground">
-          {isEditing ? 'Update your project details' : 'Manage and track your project progress'}
+          Manage and track your project progress
         </p>
       </div>
 
