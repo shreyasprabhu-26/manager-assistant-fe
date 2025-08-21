@@ -67,7 +67,7 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
                 className={cn(
                   "mt-2 text-xs font-medium text-center max-w-[100px]",
                   step.current || step.completed
-                    ? "text-primary"
+                    ? "text-blue-600 dark:text-blue-400"
                     : "text-muted-foreground"
                 )}
               >
