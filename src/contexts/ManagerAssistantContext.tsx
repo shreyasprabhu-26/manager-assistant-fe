@@ -17,6 +17,8 @@ interface ManagerAssistantContextType {
   updateProject: (projectId: string, updates: Partial<ProjectData>) => void;
   setCurrentProject: (projectId: string) => void;
   getCurrentProject: (projectId: string) => ProjectData | null;
+  nextStep: (projectId: string) => void;
+  prevStep: (projectId: string) => void;
 }
 
 const ManagerAssistantContext = createContext<ManagerAssistantContextType | undefined>(undefined);
