@@ -58,7 +58,7 @@ export const ManagerAssistantProvider: React.FC<ManagerAssistantProviderProps> =
       projectName,
       description,
       currentStep: 1,
-      totalSteps: 3,
+      totalSteps: stepRegistry.totalSteps,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
