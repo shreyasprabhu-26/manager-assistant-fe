@@ -20,6 +20,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ManagerAssist from "./apps/manager-assistant/ManagerAssist";
+import ProjectDetail from "./apps/manager-assistant/components/ProjectDetail";
 import SowToHld from "./apps/SowToHld";
 import NotFound from "./pages/NotFound";
 
