@@ -33,12 +33,7 @@ const ProjectDetail: React.FC = () => {
       case 1:
         return <ProjectForm projectId={projectId} />;
       case 2:
-        return (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold mb-4">Google Sheet Input</h2>
-            <p className="text-muted-foreground">This step is coming soon...</p>
-          </div>
-        );
+        return <GoogleSheetInput projectId={projectId} />;
       case 3:
         return (
           <div className="text-center py-12">
