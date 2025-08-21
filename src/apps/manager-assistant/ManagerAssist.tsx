@@ -87,7 +87,10 @@ export default function ManagerAssist() {
               <span>Filter</span>
             </Button>
           </div>
-          <Button className="bg-primary text-primary-foreground flex items-center space-x-1 ml-2">
+          <Button
+            onClick={handleNewProject}
+            className="bg-primary text-primary-foreground flex items-center space-x-1 ml-2"
+          >
             <Plus className="h-4 w-4" />
             <span>New Project</span>
           </Button>
