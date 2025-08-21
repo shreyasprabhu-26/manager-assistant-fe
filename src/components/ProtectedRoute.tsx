@@ -1,14 +1,35 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import Layout from './Layout';
+import React, { useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import Layout from "./Layout";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isTokenExpired, logout } = useAuth();
+  const navigate = useNavigate();
+
+  // Check for token expiration only on initial component mount, not on every route change
+  useEffect(() => {
+    // Skip the check if we're still loading
+    if (isLoading) return;
+
+    // We only want to check token expiration on mount
+    const checkTokenExpiration = async () => {
+      try {
+        const expired = await isTokenExpired();
+        if (expired) {
+          logout();
+        }
+      } catch (error) {
+        console.error("Error checking token expiration:", error);
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
 
   if (isLoading) {
     return (
