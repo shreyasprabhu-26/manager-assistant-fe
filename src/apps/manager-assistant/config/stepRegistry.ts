@@ -49,6 +49,21 @@ export const stepRegistry: StepRegistryConfig = {
     },
     {
       id: 3,
+      key: 'project-configuration',
+      title: 'Project Configuration',
+      description: 'Configure your project methodology and issue tracking preferences',
+      component: ProjectConfiguration,
+      isCompleted: (projectId: string) => {
+        // Add logic to check if step is completed
+        return false;
+      },
+      canNavigateTo: (projectId: string, currentStep: number) => {
+        // Allow navigation if previous steps are completed or if already on/past this step
+        return currentStep >= 3;
+      },
+    },
+    {
+      id: 4,
       key: 'review-sheet',
       title: 'Review Sheet',
       description: 'Review and finalize your generated tasks',
@@ -59,7 +74,7 @@ export const stepRegistry: StepRegistryConfig = {
       },
       canNavigateTo: (projectId: string, currentStep: number) => {
         // Allow navigation if previous steps are completed or if already on/past this step
-        return currentStep >= 3;
+        return currentStep >= 4;
       },
     },
   ],
