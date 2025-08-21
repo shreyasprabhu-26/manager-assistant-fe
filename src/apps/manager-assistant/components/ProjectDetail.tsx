@@ -3,6 +3,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import { useManagerAssistant } from '@/contexts/ManagerAssistantContext';
 import ProjectProgressBar from './ProjectProgressBar';
 import ProjectForm from './ProjectForm';
+import GoogleSheetInput from './GoogleSheetInput';
 
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
