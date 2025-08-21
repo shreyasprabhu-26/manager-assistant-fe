@@ -39,10 +39,10 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
                 className={cn(
                   "w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all duration-300",
                   step.completed
-                    ? "bg-primary text-primary-foreground border-primary"
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg"
                     : step.current
-                    ? "bg-primary text-primary-foreground border-primary shadow-lg"
-                    : "bg-background border-border text-muted-foreground"
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-xl ring-2 ring-blue-200 dark:ring-blue-800"
+                    : "bg-muted border-border text-muted-foreground hover:border-blue-300 hover:bg-muted/80"
                 )}
               >
                 {step.completed ? (
