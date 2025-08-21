@@ -36,7 +36,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ projectId }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!projectName.trim()) {
       return;
     }
@@ -46,9 +46,17 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ projectId }) => {
         projectName: projectName.trim(),
         description: description.trim(),
       });
-      // Navigate to next step or stay on current page
-      navigate(`/manager-assist/${projectId}`);
+      // Just update, don't progress step
+    } else if (projectId) {
+      // This is completing the creation step
+      updateProject(projectId, {
+        projectName: projectName.trim(),
+        description: description.trim(),
+      });
+      // Progress to next step
+      nextStep(projectId);
     } else {
+      // This shouldn't happen, but fallback
       const newProjectId = createProject(projectName.trim(), description.trim());
       navigate(`/manager-assist/${newProjectId}`);
     }
