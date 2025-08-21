@@ -14,16 +14,17 @@ interface ProjectFormProps {
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ projectId }) => {
   const navigate = useNavigate();
-  const { createProject, getCurrentProject, updateProject } = useManagerAssistant();
-  
+  const { createProject, getCurrentProject, updateProject, nextStep } = useManagerAssistant();
+
   const existingProject = projectId ? getCurrentProject(projectId) : null;
-  
+
   const [projectName, setProjectName] = useState(existingProject?.projectName || '');
   const [description, setDescription] = useState(existingProject?.description || '');
   const [charCount, setCharCount] = useState(existingProject?.description?.length || 0);
-  
+
   const maxChars = 160;
-  const isEditing = !!existingProject;
+  // Consider it editing only if the project has a name already saved
+  const isEditing = !!(existingProject && existingProject.projectName);
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
