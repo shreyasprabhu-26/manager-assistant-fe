@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import GridBackgroundDemo from "./ui/grid-background-demo";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,8 +18,11 @@ export default function Layout({ children }: LayoutProps) {
       <div className="flex h-[88vh] overflow-hidden">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <main className="flex-1 lg:ml-0 content-gradient overflow-auto">
-          <div className="container mx-auto p-6 h-full">{children}</div>
+        <main className="flex-1 lg:ml-0 content-gradient overflow-auto relative">
+          <GridBackgroundDemo />
+          <div className="container mx-auto p-6 h-full relative z-10">
+            {children}
+          </div>
         </main>
       </div>
 
