@@ -37,12 +37,12 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
             <div className="flex flex-col items-center">
               <div
                 className={cn(
-                  "w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all duration-300",
+                  "w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all duration-500 ease-in-out transform",
                   step.completed
-                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg"
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg scale-105 animate-pulse"
                     : step.current
-                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-xl ring-2 ring-blue-200 dark:ring-blue-800"
-                    : "bg-muted border-border text-muted-foreground hover:border-blue-300 hover:bg-muted/80"
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-xl ring-2 ring-blue-200 dark:ring-blue-800 scale-110"
+                    : "bg-muted border-border text-muted-foreground hover:border-blue-300 hover:bg-muted/80 hover:scale-105"
                 )}
               >
                 {step.completed ? (
