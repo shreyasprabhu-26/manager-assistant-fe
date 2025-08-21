@@ -80,9 +80,9 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
               <div className="flex-1 mx-4">
                 <div
                   className={cn(
-                    "h-0.5 transition-all duration-300",
+                    "h-1 transition-all duration-300 rounded-full",
                     step.completed
-                      ? "bg-primary"
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600"
                       : "bg-border"
                   )}
                 />
