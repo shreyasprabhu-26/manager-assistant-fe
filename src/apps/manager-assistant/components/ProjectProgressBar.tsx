@@ -20,7 +20,8 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
   currentStep,
   totalSteps,
   stepLabels = ['Create Project', 'Google Sheet Input', 'Review Sheet'],
-  className
+  className,
+  onStepClick
 }) => {
   const steps: ProgressStep[] = Array.from({ length: totalSteps }, (_, index) => ({
     id: index + 1,
