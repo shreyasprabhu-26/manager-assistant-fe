@@ -142,7 +142,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ projectId }) => {
                 disabled={!projectName.trim()}
               >
                 <Sparkles className="h-4 w-4" />
-                {isEditing ? "Update Project" : "Let's Get Started"}
+                Let's Get Started
               </Button>
             </div>
           </form>
