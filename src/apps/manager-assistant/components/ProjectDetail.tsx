@@ -51,10 +51,10 @@ const ProjectDetail: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="space-y-6">
       {/* Progress Bar */}
       {project && (
-        <div className="border-b border-border bg-card">
+        <div className="bg-card border border-border rounded-xl shadow-sm">
           <ProjectProgressBar
             currentStep={project.currentStep}
             totalSteps={project.totalSteps}
@@ -63,7 +63,7 @@ const ProjectDetail: React.FC = () => {
       )}
 
       {/* Main Content */}
-      <div className="container mx-auto">
+      <div className="w-full">
         {renderCurrentStep()}
       </div>
     </div>
