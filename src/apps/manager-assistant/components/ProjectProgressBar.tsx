@@ -37,14 +37,15 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
           <React.Fragment key={step.id}>
             {/* Step Circle */}
             <div className="flex flex-col items-center">
-              <div
+              <button
+                onClick={() => onStepClick?.(step.id)}
                 className={cn(
-                  "w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all duration-500 ease-in-out transform",
+                  "w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all duration-300 cursor-pointer",
                   step.completed
-                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg scale-105 animate-pulse"
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg hover:shadow-xl"
                     : step.current
-                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-xl ring-2 ring-blue-200 dark:ring-blue-800 scale-110"
-                    : "bg-muted border-border text-muted-foreground hover:border-blue-300 hover:bg-muted/80 hover:scale-105"
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg ring-2 ring-blue-200 dark:ring-blue-800"
+                    : "bg-muted border-border text-muted-foreground hover:border-blue-300 hover:bg-muted/80 hover:shadow-md"
                 )}
               >
                 {step.completed ? (
@@ -64,17 +65,18 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
                 ) : (
                   step.id
                 )}
-              </div>
-              <span
+              </button>
+              <button
+                onClick={() => onStepClick?.(step.id)}
                 className={cn(
-                  "mt-2 text-xs font-medium text-center max-w-[100px]",
+                  "mt-2 text-xs font-medium text-center max-w-[100px] cursor-pointer hover:underline transition-colors",
                   step.current || step.completed
                     ? "text-blue-600 dark:text-blue-400"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {step.label}
-              </span>
+              </button>
             </div>
 
             {/* Connector Line */}
