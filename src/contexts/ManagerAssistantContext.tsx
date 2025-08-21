@@ -44,7 +44,7 @@ export const ManagerAssistantProvider: React.FC<ManagerAssistantProviderProps> =
       projectName: 'test',
       description: 'Test project for task generation with waterfall methodology',
       currentStep: 2,
-      totalSteps: 3,
+      totalSteps: stepRegistry.totalSteps,
       createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
       updatedAt: new Date(),
     }
