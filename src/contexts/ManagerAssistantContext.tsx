@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { stepRegistry } from '@/apps/manager-assistant/config/stepRegistry';
 
 export interface ProjectData {
   projectId: string;
