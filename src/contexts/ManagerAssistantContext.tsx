@@ -7,6 +7,10 @@ export interface ProjectData {
   description: string;
   currentStep: number;
   totalSteps: number;
+  // Project Configuration fields
+  methodology?: "waterfall" | "agile";
+  issue_type?: "story" | "task";
+  subtask_list?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }
