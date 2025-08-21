@@ -13,6 +13,7 @@ interface ProjectProgressBarProps {
   totalSteps: number;
   stepLabels?: string[];
   className?: string;
+  onStepClick?: (step: number) => void;
 }
 
 const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
