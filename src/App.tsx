@@ -11,6 +11,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Providers
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
+import { ManagerAssistantProvider } from "@/contexts/ManagerAssistantContext";
 
 // Components
 import ProtectedRoute from "@/components/ProtectedRoute";
