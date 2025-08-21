@@ -77,14 +77,18 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
 
             {/* Connector Line */}
             {index < steps.length - 1 && (
-              <div className="flex-1 mx-4">
+              <div className="flex-1 mx-4 relative">
+                <div className="h-1 bg-border rounded-full" />
                 <div
                   className={cn(
-                    "h-1 transition-all duration-300 rounded-full",
+                    "absolute top-0 left-0 h-1 rounded-full transition-all duration-700 ease-in-out",
                     step.completed
-                      ? "bg-gradient-to-r from-blue-500 to-purple-600"
-                      : "bg-border"
+                      ? "w-full bg-gradient-to-r from-blue-500 to-purple-600"
+                      : "w-0 bg-gradient-to-r from-blue-500 to-purple-600"
                   )}
+                  style={{
+                    animationDelay: step.completed ? `${index * 200}ms` : '0ms'
+                  }}
                 />
               </div>
             )}
