@@ -4,6 +4,7 @@ import { StepRegistryConfig } from '../types/steps';
 import CreateProject from '../steps/01-create-project';
 import SheetInput from '../steps/02-sheet-input';
 import ReviewSheet from '../steps/03-review-sheet';
+import ProjectConfiguration from '../steps/04-project-configuration';
 
 /**
  * Step Registry Configuration
