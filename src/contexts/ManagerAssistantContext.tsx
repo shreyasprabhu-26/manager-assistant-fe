@@ -34,7 +34,18 @@ interface ManagerAssistantProviderProps {
 }
 
 export const ManagerAssistantProvider: React.FC<ManagerAssistantProviderProps> = ({ children }) => {
-  const [projects, setProjects] = useState<Record<string, ProjectData>>({});
+  // Initialize with mock project data
+  const [projects, setProjects] = useState<Record<string, ProjectData>>({
+    '1': {
+      projectId: '1',
+      projectName: 'test',
+      description: 'Test project for task generation with waterfall methodology',
+      currentStep: 2,
+      totalSteps: 3,
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+      updatedAt: new Date(),
+    }
+  });
   const [currentProject, setCurrentProjectState] = useState<ProjectData | null>(null);
 
   const createProject = (projectName: string, description: string): string => {
