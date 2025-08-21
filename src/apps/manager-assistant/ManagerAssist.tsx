@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -20,6 +21,7 @@ import {
   Clock,
   ChevronRight,
 } from "lucide-react";
+import { useManagerAssistant } from "@/contexts/ManagerAssistantContext";
 
 export default function ManagerAssist() {
   // Mock project data
