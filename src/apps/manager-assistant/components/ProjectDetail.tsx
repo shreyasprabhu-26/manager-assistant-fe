@@ -7,7 +7,7 @@ import GoogleSheetInput from './GoogleSheetInput';
 
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const { getCurrentProject, setCurrentProject } = useManagerAssistant();
+  const { getCurrentProject, setCurrentProject, updateProject } = useManagerAssistant();
 
   const project = projectId ? getCurrentProject(projectId) : null;
 
