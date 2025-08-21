@@ -60,6 +60,7 @@ const ProjectDetail: React.FC = () => {
           <ProjectProgressBar
             currentStep={project.currentStep}
             totalSteps={project.totalSteps}
+            onStepClick={handleStepClick}
           />
         </div>
       )}
