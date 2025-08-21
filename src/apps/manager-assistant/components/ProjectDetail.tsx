@@ -26,6 +26,12 @@ const ProjectDetail: React.FC = () => {
     return <Navigate to="/manager-assist" replace />;
   }
 
+  const handleStepClick = (step: number) => {
+    if (projectId) {
+      updateProject(projectId, { currentStep: step });
+    }
+  };
+
   const renderCurrentStep = () => {
     if (!project) return null;
 
