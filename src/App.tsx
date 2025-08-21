@@ -18,7 +18,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 // Pages
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ManagerAssist from "./apps/ManagerAssist";
+import ManagerAssist from "./apps/manager-assistant/ManagerAssist";
 import SowToHld from "./apps/SowToHld";
 import NotFound from "./pages/NotFound";
 
@@ -34,26 +34,38 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/manager-assist" element={
-                <ProtectedRoute>
-                  <ManagerAssist />
-                </ProtectedRoute>
-              } />
-              <Route path="/sow-to-hld" element={
-                <ProtectedRoute>
-                  <SowToHld />
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manager-assist"
+                element={
+                  <ProtectedRoute>
+                    <ManagerAssist />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sow-to-hld"
+                element={
+                  <ProtectedRoute>
+                    <SowToHld />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
