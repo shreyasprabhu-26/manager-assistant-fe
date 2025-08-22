@@ -78,6 +78,14 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/qa-test-case"
+                  element={
+                    <ProtectedRoute>
+                      <QaTestCase />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
