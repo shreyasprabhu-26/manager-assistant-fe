@@ -44,7 +44,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed right-0 top-16 z-50 h-screen w-80 transform border-l bg-background dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-transform duration-300 ease-in-out",
+          "fixed right-0 top-16 z-50 h-[calc(100vh-4rem)] w-80 transform border-l bg-background dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-transform duration-300 ease-in-out lg:w-80 md:w-72 sm:w-64",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
