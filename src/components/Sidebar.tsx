@@ -47,6 +47,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       color: app.color,
       bgColor: app.bgGradient.includes("blue")
         ? "bg-blue-100 dark:bg-blue-900/20"
+        : app.bgGradient.includes("green")
+        ? "bg-green-100 dark:bg-green-900/20"
         : "bg-purple-100 dark:bg-purple-900/20",
     })),
   ];
