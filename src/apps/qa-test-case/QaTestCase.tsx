@@ -130,15 +130,15 @@ export default function QaTestCase() {
   };
 
   return (
-    <div className="flex h-full relative">
+    <div className="flex h-full relative -m-6">
       {/* Main Content */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${
         isRightSidebarOpen ? 'mr-80' : 'mr-0'
       }`}>
-        
+
         {/* Header */}
         <div className="border-b border-border bg-card/50 backdrop-blur-sm">
-          <div className="container mx-auto px-6 py-4">
+          <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
@@ -153,7 +153,7 @@ export default function QaTestCase() {
                   </p>
                 </div>
               </div>
-              
+
               {/* Chat History Toggle */}
               <Button
                 onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
@@ -162,7 +162,7 @@ export default function QaTestCase() {
                 className="flex items-center gap-2"
               >
                 <MessageSquare className="h-4 w-4" />
-                Chat History
+                <span className="hidden sm:inline">Chat History</span>
                 {isRightSidebarOpen ? (
                   <ChevronRight className="h-4 w-4" />
                 ) : (
