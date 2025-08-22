@@ -19,7 +19,7 @@ interface ProjectProgressBarProps {
 const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
   currentStep,
   totalSteps,
-  stepLabels = ['Create Project', 'Google Sheet Input', 'Project Configuration', 'Review Sheet'],
+  stepLabels = ['Create Project', 'Google Sheet Input', 'Project Configuration', 'Review & Confirm', 'Review Sheet'],
   className,
   onStepClick
 }) => {
