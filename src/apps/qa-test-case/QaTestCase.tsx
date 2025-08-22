@@ -175,7 +175,7 @@ export default function QaTestCase() {
 
         {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto bg-gradient-to-br from-background via-muted/20 to-background">
-          <div className="container mx-auto px-6 py-6">
+          <div className="px-6 py-6">
             {messages.length === 0 ? (
               /* Welcome State */
               <div className="max-w-4xl mx-auto">
