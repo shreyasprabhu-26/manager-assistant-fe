@@ -5,7 +5,7 @@ import { mockApps } from "@/data/mockApps";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Home, FileText, FileCode, X, Zap, Sparkles } from "lucide-react";
+import { Home, FileText, FileCode, X, Zap, Sparkles, CheckSquare } from "lucide-react";
 
 const iconMap = {
   Home,
@@ -13,6 +13,7 @@ const iconMap = {
   FileCode,
   Zap,
   Sparkles,
+  CheckSquare,
 };
 
 interface SidebarProps {
