@@ -61,5 +61,5 @@ export const mockUser: User = {
   email: 'sarah.johnson@company.com',
   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=150&h=150&fit=crop&crop=face',
   role: 'manager',
-  permissions: ['manager', 'admin']
+  permissions: ['manager', 'admin', 'qa', 'tester']
 };
