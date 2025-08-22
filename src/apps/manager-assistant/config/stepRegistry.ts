@@ -65,6 +65,21 @@ export const stepRegistry: StepRegistryConfig = {
     },
     {
       id: 4,
+      key: 'review-confirm',
+      title: 'Review & Confirm',
+      description: 'Review your project details before generating dependencies',
+      component: ReviewConfirm,
+      isCompleted: (projectId: string) => {
+        // Add logic to check if step is completed
+        return false;
+      },
+      canNavigateTo: (projectId: string, currentStep: number) => {
+        // Allow navigation if previous steps are completed or if already on/past this step
+        return currentStep >= 4;
+      },
+    },
+    {
+      id: 5,
       key: 'review-sheet',
       title: 'Review Sheet',
       description: 'Review and finalize your generated tasks',
@@ -75,7 +90,7 @@ export const stepRegistry: StepRegistryConfig = {
       },
       canNavigateTo: (projectId: string, currentStep: number) => {
         // Allow navigation if previous steps are completed or if already on/past this step
-        return currentStep >= 4;
+        return currentStep >= 5;
       },
     },
   ],
