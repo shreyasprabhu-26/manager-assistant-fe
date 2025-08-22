@@ -283,47 +283,54 @@ export default function QaTestCase() {
                 </div>
               )}
 
-              <div className="flex gap-2">
-                {/* Attach Files Button */}
-                <Button
-                  onClick={handleFileAttach}
-                  variant="outline"
-                  size="icon"
-                  className="shrink-0"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex gap-2 flex-1">
+                  {/* Attach Files Button */}
+                  <Button
+                    onClick={handleFileAttach}
+                    variant="outline"
+                    size="icon"
+                    className="shrink-0"
+                    title="Attach files"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
 
-                {/* Predefined Prompts Dropdown */}
-                <Select onValueChange={handlePromptSelect}>
-                  <SelectTrigger className="w-[200px] shrink-0">
-                    <SelectValue placeholder="Select prompt..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {predefinedPrompts.map((promptText, index) => (
-                      <SelectItem key={index} value={promptText}>
-                        {promptText.length > 40 ? `${promptText.slice(0, 40)}...` : promptText}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  {/* Predefined Prompts Dropdown */}
+                  <Select onValueChange={handlePromptSelect}>
+                    <SelectTrigger className="w-[200px] shrink-0 hidden sm:flex">
+                      <SelectValue placeholder="Select prompt..." />
+                    </SelectTrigger>
+                    <SelectTrigger className="w-full sm:hidden">
+                      <SelectValue placeholder="Templates..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {predefinedPrompts.map((promptText, index) => (
+                        <SelectItem key={index} value={promptText}>
+                          {promptText.length > 40 ? `${promptText.slice(0, 40)}...` : promptText}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                {/* Input Field */}
-                <Input
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Describe what test cases you need or upload requirements..."
-                  className="flex-1"
-                />
+                  {/* Input Field */}
+                  <Input
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Describe what test cases you need..."
+                    className="flex-1 min-w-0"
+                  />
+                </div>
 
                 {/* Send Button */}
                 <Button
                   onClick={handleSubmit}
                   disabled={!prompt.trim()}
-                  className="shrink-0 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                  className="shrink-0 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 sm:w-auto w-full"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-4 w-4 mr-2 sm:mr-0" />
+                  <span className="sm:hidden">Send</span>
                 </Button>
               </div>
             </div>
