@@ -130,210 +130,203 @@ export default function QaTestCase() {
   };
 
   return (
-    <div className="flex h-full relative -m-6">
+    <div className="flex h-full relative -m-6 bg-background dark:bg-slate-900">
       {/* Main Content */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${
         isRightSidebarOpen ? 'mr-80' : 'mr-0'
       }`}>
 
-        {/* Header */}
-        <div className="border-b border-border bg-card/50 backdrop-blur-sm">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
-                  <CheckSquare className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                    QA Test Case Generator
-                  </h1>
-                  <p className="text-sm text-muted-foreground">
-                    Generate comprehensive test cases and QA documentation with AI
-                  </p>
-                </div>
-              </div>
-
-              {/* Chat History Toggle */}
-              <Button
-                onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span className="hidden sm:inline">Chat History</span>
-                {isRightSidebarOpen ? (
-                  <ChevronRight className="h-4 w-4" />
-                ) : (
-                  <ChevronLeft className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
+        {/* Chat History Toggle - Minimal */}
+        <div className="absolute top-4 right-4 z-10">
+          <Button
+            onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <MessageSquare className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-background via-muted/20 to-background">
-          <div className="px-6 py-6">
+        <div className="flex-1 overflow-y-auto">
+          <div className="min-h-full flex flex-col justify-center px-6">
             {messages.length === 0 ? (
-              /* Welcome State */
-              <div className="max-w-4xl mx-auto">
-                <Card className="border-border shadow-lg card-gradient">
-                  <CardHeader className="text-center">
-                    <div className="flex justify-center mb-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
-                        <CheckSquare className="h-8 w-8 text-white" />
+              /* Gemini-style Welcome State */
+              <div className="max-w-2xl mx-auto text-center space-y-8">
+                {/* Greeting */}
+                <div className="space-y-2">
+                  <h1 className="text-4xl md:text-5xl font-normal">
+                    <span className="text-blue-500">Hello,</span>
+                  </h1>
+                  <h2 className="text-3xl md:text-4xl font-normal text-muted-foreground">
+                    QA Test Case Generator for Niveus Solutions
+                  </h2>
+                </div>
+
+                {/* Main Input Area - Gemini Style */}
+                <div className="w-full max-w-3xl mx-auto">
+                  <div className="relative">
+                    {/* Attached Files */}
+                    {selectedFiles.length > 0 && (
+                      <div className="mb-4 flex flex-wrap gap-2 justify-center">
+                        {selectedFiles.map((file, index) => (
+                          <Badge
+                            key={index}
+                            variant="secondary"
+                            className="flex items-center gap-2 p-2"
+                          >
+                            <Paperclip className="h-3 w-3" />
+                            {file.name}
+                            <button
+                              onClick={() => removeFile(index)}
+                              className="ml-1 hover:text-destructive"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
                       </div>
+                    )}
+
+                    {/* Input Container */}
+                    <div className="relative bg-muted/50 dark:bg-slate-800/50 rounded-full border border-border hover:border-border/80 transition-colors">
+                      <div className="flex items-center px-4 py-4">
+                        {/* Add Files/Tools Button */}
+                        <Button
+                          onClick={handleFileAttach}
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-full h-8 w-8 p-0 mr-3 hover:bg-muted"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+
+                        {/* Templates Dropdown */}
+                        <Select onValueChange={handlePromptSelect}>
+                          <SelectTrigger className="border-0 bg-transparent shadow-none h-auto p-0 mr-3 w-auto hover:bg-muted rounded-md">
+                            <div className="flex items-center gap-1 px-2 py-1">
+                              <Sparkles className="h-4 w-4" />
+                              <span className="text-sm">Templates</span>
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {predefinedPrompts.map((promptText, index) => (
+                              <SelectItem key={index} value={promptText}>
+                                {promptText.length > 50 ? `${promptText.slice(0, 50)}...` : promptText}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        {/* Main Input */}
+                        <input
+                          value={prompt}
+                          onChange={(e) => setPrompt(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          placeholder="Enter a prompt for QA Test Case Generator"
+                          className="flex-1 bg-transparent border-0 outline-none text-foreground placeholder:text-muted-foreground text-base"
+                        />
+
+                        {/* Mic Icon */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-full h-8 w-8 p-0 ml-3 hover:bg-muted"
+                        >
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                            />
+                          </svg>
+                        </Button>
+                      </div>
+
+                      {/* Send Button */}
+                      {prompt.trim() && (
+                        <Button
+                          onClick={handleSubmit}
+                          size="sm"
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full h-8 w-8 p-0 bg-primary hover:bg-primary/90"
+                        >
+                          <Send className="h-3 w-3" />
+                        </Button>
+                      )}
                     </div>
-                    <CardTitle className="text-2xl mb-2 flex items-center justify-center gap-2">
-                      Welcome to QA Test Case Generator
-                      <Sparkles className="h-5 w-5 text-yellow-500" />
-                    </CardTitle>
-                    <CardDescription className="text-base">
-                      Generate comprehensive test cases, scenarios, and QA documentation using AI assistance.
-                      Upload your requirements or describe what you need to test.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <h3 className="font-semibold text-green-700 dark:text-green-400 flex items-center gap-2">
-                          <CheckSquare className="h-4 w-4" />
-                          What you can generate:
-                        </h3>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                          <li>• Functional test cases</li>
-                          <li>• API testing scenarios</li>
-                          <li>• Performance test plans</li>
-                          <li>• Security test cases</li>
-                          <li>• User acceptance tests</li>
-                          <li>• Regression test suites</li>
-                        </ul>
-                      </div>
-                      <div className="space-y-3">
-                        <h3 className="font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
-                          <Paperclip className="h-4 w-4" />
-                          Supported file types:
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          <Badge variant="secondary">PDF</Badge>
-                          <Badge variant="secondary">DOC/DOCX</Badge>
-                          <Badge variant="secondary">TXT</Badge>
-                          <Badge variant="secondary">CSV</Badge>
-                          <Badge variant="secondary">XLSX</Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
+
+                {/* Subtle Feature Hints */}
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <p>Generate test cases • Upload requirements • Create QA documentation</p>
+                </div>
               </div>
             ) : (
               /* Chat Messages */
-              <div className="max-w-4xl mx-auto space-y-6">
+              <div className="max-w-3xl mx-auto space-y-6 py-8">
                 {messages.map((message) => (
                   <div
                     key={message.id}
                     className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-lg p-4 ${
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                         message.type === 'user'
-                          ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
-                          : 'bg-card border border-border shadow-sm'
+                          ? 'bg-primary text-primary-foreground ml-8'
+                          : 'bg-muted mr-8'
                       }`}
                     >
-                      <p className="text-sm">{message.content}</p>
-                      <p className={`text-xs mt-2 ${
-                        message.type === 'user' ? 'text-green-100' : 'text-muted-foreground'
-                      }`}>
+                      <p className="text-sm leading-relaxed">{message.content}</p>
+                      <p className={`text-xs mt-2 opacity-70`}>
                         {message.timestamp.toLocaleTimeString()}
                       </p>
                     </div>
                   </div>
                 ))}
+
+                {/* Input at bottom when chatting */}
+                <div className="sticky bottom-0 pt-4">
+                  <div className="relative bg-muted/50 dark:bg-slate-800/50 rounded-full border border-border">
+                    <div className="flex items-center px-4 py-3">
+                      <Button
+                        onClick={handleFileAttach}
+                        variant="ghost"
+                        size="sm"
+                        className="rounded-full h-8 w-8 p-0 mr-3"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+
+                      <input
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Continue the conversation..."
+                        className="flex-1 bg-transparent border-0 outline-none text-foreground placeholder:text-muted-foreground"
+                      />
+
+                      {prompt.trim() && (
+                        <Button
+                          onClick={handleSubmit}
+                          size="sm"
+                          className="rounded-full h-8 w-8 p-0 ml-3"
+                        >
+                          <Send className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Input Area */}
-        <div className="border-t border-border bg-card/50 backdrop-blur-sm">
-          <div className="px-6 py-4">
-            <div className="max-w-4xl mx-auto">
-              {/* Attached Files */}
-              {selectedFiles.length > 0 && (
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {selectedFiles.map((file, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="flex items-center gap-2 p-2"
-                    >
-                      <Paperclip className="h-3 w-3" />
-                      {file.name}
-                      <button
-                        onClick={() => removeFile(index)}
-                        className="ml-1 hover:text-destructive"
-                      >
-                        ×
-                      </button>
-                    </Badge>
-                  ))}
-                </div>
-              )}
-
-              <div className="flex flex-col sm:flex-row gap-2">
-                <div className="flex gap-2 flex-1">
-                  {/* Attach Files Button */}
-                  <Button
-                    onClick={handleFileAttach}
-                    variant="outline"
-                    size="icon"
-                    className="shrink-0"
-                    title="Attach files"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-
-                  {/* Predefined Prompts Dropdown */}
-                  <Select onValueChange={handlePromptSelect}>
-                    <SelectTrigger className="w-[200px] shrink-0 hidden sm:flex">
-                      <SelectValue placeholder="Select prompt..." />
-                    </SelectTrigger>
-                    <SelectTrigger className="w-full sm:hidden">
-                      <SelectValue placeholder="Templates..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {predefinedPrompts.map((promptText, index) => (
-                        <SelectItem key={index} value={promptText}>
-                          {promptText.length > 40 ? `${promptText.slice(0, 40)}...` : promptText}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {/* Input Field */}
-                  <Input
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Describe what test cases you need..."
-                    className="flex-1 min-w-0"
-                  />
-                </div>
-
-                {/* Send Button */}
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!prompt.trim()}
-                  className="shrink-0 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 sm:w-auto w-full"
-                >
-                  <Send className="h-4 w-4 mr-2 sm:mr-0" />
-                  <span className="sm:hidden">Send</span>
-                </Button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
