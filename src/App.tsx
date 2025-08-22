@@ -22,6 +22,7 @@ import Dashboard from "./pages/Dashboard";
 import ManagerAssist from "./apps/manager-assistant/ManagerAssist";
 import ProjectDetail from "./apps/manager-assistant/components/ProjectDetail";
 import SowToHld from "./apps/SowToHld";
+import QaTestCase from "./apps/qa-test-case/QaTestCase";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
