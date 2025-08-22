@@ -3,8 +3,9 @@ import { StepRegistryConfig } from '../types/steps';
 // Import all step components
 import CreateProject from '../steps/01-create-project';
 import SheetInput from '../steps/02-sheet-input';
-import ReviewSheet from '../steps/03-review-sheet';
 import ProjectConfiguration from '../steps/04-project-configuration';
+import ReviewConfirm from '../steps/04-review-confirm';
+import ReviewSheet from '../steps/03-review-sheet';
 
 /**
  * Step Registry Configuration
