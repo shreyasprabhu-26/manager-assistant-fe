@@ -259,7 +259,7 @@ export default function QaTestCase() {
 
         {/* Input Area */}
         <div className="border-t border-border bg-card/50 backdrop-blur-sm">
-          <div className="container mx-auto px-6 py-4">
+          <div className="px-6 py-4">
             <div className="max-w-4xl mx-auto">
               {/* Attached Files */}
               {selectedFiles.length > 0 && (
