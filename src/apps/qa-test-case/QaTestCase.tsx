@@ -403,26 +403,54 @@ export default function QaTestCase() {
               </div>
             ) : (
               /* Chat Messages */
-              <div className="max-w-3xl mx-auto space-y-6 py-8">
+              <div className="max-w-5xl mx-auto space-y-6 py-8">
                 {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
+                  <div key={message.id} className="space-y-4">
                     <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                        message.type === 'user'
-                          ? 'bg-primary text-primary-foreground ml-8'
-                          : 'bg-muted mr-8'
-                      }`}
+                      className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <p className="text-sm leading-relaxed">{message.content}</p>
-                      <p className={`text-xs mt-2 opacity-70`}>
-                        {message.timestamp.toLocaleTimeString()}
-                      </p>
+                      <div
+                        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                          message.type === 'user'
+                            ? 'bg-primary text-primary-foreground ml-8'
+                            : 'bg-muted mr-8'
+                        }`}
+                      >
+                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        <p className={`text-xs mt-2 opacity-70`}>
+                          {message.timestamp.toLocaleTimeString()}
+                        </p>
+                      </div>
                     </div>
+
+                    {/* CSV Table for assistant messages with CSV data */}
+                    {message.type === 'assistant' && message.csvData && message.csvHeaders && (
+                      <div className="w-full">
+                        <CSVTable
+                          data={message.csvData}
+                          headers={message.csvHeaders}
+                          fileName={`qa-test-cases-${message.timestamp.getTime()}.csv`}
+                        />
+                      </div>
+                    )}
                   </div>
                 ))}
+
+                {/* Loading indicator */}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted rounded-2xl px-4 py-3 mr-8">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce delay-75"></div>
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce delay-150"></div>
+                        <span className="text-sm text-muted-foreground ml-2">
+                          Generating test cases...
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Input at bottom when chatting */}
                 <div className="sticky bottom-0 pt-4">
@@ -433,6 +461,7 @@ export default function QaTestCase() {
                         variant="ghost"
                         size="sm"
                         className="rounded-full h-8 w-8 p-0 mr-3"
+                        disabled={isLoading}
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
@@ -443,9 +472,10 @@ export default function QaTestCase() {
                         onKeyPress={handleKeyPress}
                         placeholder="Continue the conversation..."
                         className="flex-1 bg-transparent border-0 outline-none text-foreground placeholder:text-muted-foreground"
+                        disabled={isLoading}
                       />
 
-                      {prompt.trim() && (
+                      {prompt.trim() && !isLoading && (
                         <Button
                           onClick={handleSubmit}
                           size="sm"
