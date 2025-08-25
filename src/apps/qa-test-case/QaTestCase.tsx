@@ -178,7 +178,8 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
       const result = await response.json();
 
       if (result.success && result.data) {
-        return parseCSVData(result.data);
+        const parsedData = parseCSVData(result.data);
+        return { ...parsedData, isMockData: false };
       } else {
         throw new Error('Invalid response format');
       }
@@ -195,7 +196,8 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
 
         // Use mock data
         const mockResult = getMockCSVResponse(userPrompt);
-        return parseCSVData(mockResult.data);
+        const parsedData = parseCSVData(mockResult.data);
+        return { ...parsedData, isMockData: true };
       }
 
       // For other errors, rethrow
