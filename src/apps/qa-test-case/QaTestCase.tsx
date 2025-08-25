@@ -137,7 +137,22 @@ export default function QaTestCase() {
     return { data, headers: csvHeaders };
   };
 
+  const getMockCSVResponse = (userPrompt: string) => {
+    // Mock CSV response similar to the API format
+    const mockCSV = `\`\`\`csv
+Test Case ID,User Story,Source Document,Test Description,Test Steps,Expected Result,Status,Priority,UI,Data,Field Validation
+TC_QA_001,${userPrompt},Mock Document,Verify basic functionality for the given prompt,1. Navigate to the application. 2. Perform basic test steps.,The application should respond correctly to user inputs.,To Do,High,Displayed,Valid Data,Required
+TC_QA_002,${userPrompt},Mock Document,Verify edge case handling,1. Test with edge case inputs. 2. Verify error handling.,System should handle edge cases gracefully.,To Do,High,Error Handling,Edge Case Data,Optional
+TC_QA_003,${userPrompt},Mock Document,Verify UI responsiveness,1. Test on different screen sizes. 2. Check mobile compatibility.,UI should be responsive across all devices.,To Do,Medium,Responsive,N/A,N/A
+TC_QA_004,${userPrompt},Mock Document,Verify data validation,1. Input invalid data. 2. Check validation messages.,Proper validation messages should be displayed.,To Do,High,Validation Messages,Invalid Data,Required
+TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate high user load. 2. Monitor response times.,System should maintain acceptable response times.,To Do,Medium,Performance,Load Data,N/A
+\`\`\``;
+
+    return { success: true, data: mockCSV };
+  };
+
   const callQAAPI = async (userPrompt: string, files: File[]) => {
+    // Try real API first, fall back to mock on CORS/network errors
     const formData = new FormData();
     formData.append('prompt', userPrompt);
 
@@ -149,6 +164,10 @@ export default function QaTestCase() {
       const response = await fetch('http://35.241.31.6:80/api/qa/generate', {
         method: 'POST',
         body: formData,
+        mode: 'cors', // Explicitly set CORS mode
+        headers: {
+          // Don't set Content-Type for FormData, let browser set it
+        },
       });
 
       if (!response.ok) {
@@ -163,7 +182,22 @@ export default function QaTestCase() {
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('API call failed:', error);
+      console.warn('API call failed, using mock data:', error);
+
+      // Check if it's a CORS or network error
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        toast({
+          title: "⚠️ Using Mock Data",
+          description: "API unavailable due to CORS/network issues. Using sample test cases.",
+          className: "bg-yellow-50 border-yellow-200 text-yellow-800",
+        });
+
+        // Use mock data
+        const mockResult = getMockCSVResponse(userPrompt);
+        return parseCSVData(mockResult.data);
+      }
+
+      // For other errors, rethrow
       throw error;
     }
   };
