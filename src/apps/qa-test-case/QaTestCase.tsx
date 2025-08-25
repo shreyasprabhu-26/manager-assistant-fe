@@ -86,11 +86,10 @@ export default function QaTestCase() {
   const [prompt, setPrompt] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{id: string, content: string, type: 'user' | 'assistant', timestamp: Date, csvData?: CSVRow[], csvHeaders?: any[], isMockData?: boolean}>>([]);
+  const [messages, setMessages] = useState<Array<{id: string, content: string, type: 'user' | 'assistant', timestamp: Date, csvData?: CSVRow[], csvHeaders?: any[]}>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentCsvData, setCurrentCsvData] = useState<CSVRow[]>([]);
   const [currentCsvHeaders, setCurrentCsvHeaders] = useState<any[]>([]);
-  const [lastResponseWasMock, setLastResponseWasMock] = useState(false);
 
   const handlePromptSelect = (selectedPrompt: string) => {
     setPrompt(selectedPrompt);
@@ -139,22 +138,8 @@ export default function QaTestCase() {
     return { data, headers: csvHeaders };
   };
 
-  const getMockCSVResponse = (userPrompt: string) => {
-    // Mock CSV response similar to the API format
-    const mockCSV = `\`\`\`csv
-Test Case ID,User Story,Source Document,Test Description,Test Steps,Expected Result,Status,Priority,UI,Data,Field Validation
-TC_QA_001,${userPrompt},Mock Document,Verify basic functionality for the given prompt,1. Navigate to the application. 2. Perform basic test steps.,The application should respond correctly to user inputs.,To Do,High,Displayed,Valid Data,Required
-TC_QA_002,${userPrompt},Mock Document,Verify edge case handling,1. Test with edge case inputs. 2. Verify error handling.,System should handle edge cases gracefully.,To Do,High,Error Handling,Edge Case Data,Optional
-TC_QA_003,${userPrompt},Mock Document,Verify UI responsiveness,1. Test on different screen sizes. 2. Check mobile compatibility.,UI should be responsive across all devices.,To Do,Medium,Responsive,N/A,N/A
-TC_QA_004,${userPrompt},Mock Document,Verify data validation,1. Input invalid data. 2. Check validation messages.,Proper validation messages should be displayed.,To Do,High,Validation Messages,Invalid Data,Required
-TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate high user load. 2. Monitor response times.,System should maintain acceptable response times.,To Do,Medium,Performance,Load Data,N/A
-\`\`\``;
-
-    return { success: true, data: mockCSV };
-  };
 
   const callQAAPI = async (userPrompt: string, files: File[]) => {
-    // Try real API first, fall back to mock on CORS/network errors
     const formData = new FormData();
     formData.append('prompt', userPrompt);
 
@@ -162,42 +147,21 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
       formData.append('files', file);
     });
 
-    try {
-      const response = await axios.post('http://35.241.31.6:80/api/qa/generate', formData, {
-        headers: {
-          'Authorization': 'Bearer jasgdfiashH5HuRGhjgsdfhldsKGaif7abfk',
-          'Content-Type': 'multipart/form-data',
-        },
-        timeout: 30000, // 30 second timeout
-      });
+    const response = await axios.post('http://35.241.31.6:80/api/qa/generate', formData, {
+      headers: {
+        'Authorization': 'Bearer jasgdfiashH5HuRGhjgsdfhldsKGaif7abfk',
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 30000, // 30 second timeout
+    });
 
-      const result = response.data;
+    const result = response.data;
 
-      if (result.success && result.data) {
-        const parsedData = parseCSVData(result.data);
-        return { ...parsedData, isMockData: false };
-      } else {
-        throw new Error('Invalid response format');
-      }
-    } catch (error) {
-      console.warn('API call failed, using mock data:', error);
-
-      // Check if it's a CORS or network error
-      if (axios.isAxiosError(error) && (error.code === 'ERR_NETWORK' || error.message.includes('CORS') || error.code === 'ECONNABORTED')) {
-        toast({
-          title: "⚠️ Using Mock Data",
-          description: "API unavailable due to CORS/network issues. Using sample test cases.",
-          className: "bg-yellow-50 border-yellow-200 text-yellow-800",
-        });
-
-        // Use mock data
-        const mockResult = getMockCSVResponse(userPrompt);
-        const parsedData = parseCSVData(mockResult.data);
-        return { ...parsedData, isMockData: true };
-      }
-
-      // For other errors, rethrow
-      throw error;
+    if (result.success && result.data) {
+      const parsedData = parseCSVData(result.data);
+      return { ...parsedData };
+    } else {
+      throw new Error('Invalid response format from API');
     }
   };
 
@@ -239,36 +203,50 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
         className: "bg-blue-50 border-blue-200 text-blue-800",
       });
 
-      const { data, headers, isMockData } = await callQAAPI(currentPrompt, currentFiles);
+      const { data, headers } = await callQAAPI(currentPrompt, currentFiles);
 
       setCurrentCsvData(data);
       setCurrentCsvHeaders(headers);
-      setLastResponseWasMock(isMockData || false);
 
       const aiResponse = {
         id: (Date.now() + 1).toString(),
-        content: `Generated ${data.length} test cases successfully! ${isMockData ? '(Using mock data - API unavailable)' : ''} You can view them in the table below or download as CSV.`,
+        content: `Generated ${data.length} test cases successfully! You can view them in the table below or download as CSV.`,
         type: 'assistant' as const,
         timestamp: new Date(),
         csvData: data,
-        csvHeaders: headers,
-        isMockData: isMockData
+        csvHeaders: headers
       };
 
       setMessages(prev => [...prev, aiResponse]);
 
       toast({
-        title: isMockData ? "✅ Mock Test Cases Generated" : "✅ Test Cases Generated",
-        description: `Successfully generated ${data.length} test cases. ${isMockData ? 'Using sample data due to API issues.' : 'View or download below.'}`,
-        className: isMockData ? "bg-yellow-50 border-yellow-200 text-yellow-800" : "bg-green-50 border-green-200 text-green-800",
+        title: "✅ Test Cases Generated",
+        description: `Successfully generated ${data.length} test cases. View or download below.`,
+        className: "bg-green-50 border-green-200 text-green-800",
       });
 
     } catch (error) {
       console.error('Failed to generate test cases:', error);
 
+      let errorMessage = 'Unknown error occurred';
+
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ERR_NETWORK') {
+          errorMessage = 'Network error: Unable to connect to the API server';
+        } else if (error.code === 'ECONNABORTED') {
+          errorMessage = 'Request timeout: The API server took too long to respond';
+        } else if (error.response) {
+          errorMessage = `API Error (${error.response.status}): ${error.response.data?.message || error.response.statusText}`;
+        } else {
+          errorMessage = error.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
       const errorResponse = {
         id: (Date.now() + 1).toString(),
-        content: `Sorry, I encountered an error while generating test cases: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
+        content: `Failed to generate test cases. Error: ${errorMessage}`,
         type: 'assistant' as const,
         timestamp: new Date()
       };
@@ -276,8 +254,8 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
       setMessages(prev => [...prev, errorResponse]);
 
       toast({
-        title: "❌ Error",
-        description: "Failed to generate test cases. Please check your connection and try again.",
+        title: "❌ API Error",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -448,7 +426,7 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
                       <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                       <div className="text-xs">
                         <p className="font-medium mb-1">API Integration Status:</p>
-                        <p>Attempts to connect to the real QA API. Falls back to mock data if unavailable due to CORS/network issues.</p>
+                        <p>Connected to QA API. Requires proper authentication and network connectivity to function.</p>
                       </div>
                     </div>
                   </div>
@@ -479,19 +457,10 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
                     {/* CSV Table for assistant messages with CSV data */}
                     {message.type === 'assistant' && message.csvData && message.csvHeaders && (
                       <div className="w-full space-y-2">
-                        {message.isMockData && (
-                          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-800">
-                            <div className="flex items-center gap-2">
-                              <AlertCircle className="h-4 w-4" />
-                              <span className="font-medium">Mock Data Notice:</span>
-                              <span>These are sample test cases. Real API unavailable due to CORS/network issues.</span>
-                            </div>
-                          </div>
-                        )}
                         <CSVTable
                           data={message.csvData}
                           headers={message.csvHeaders}
-                          fileName={`qa-test-cases-${message.isMockData ? 'mock-' : ''}${message.timestamp.getTime()}.csv`}
+                          fileName={`qa-test-cases-${message.timestamp.getTime()}.csv`}
                         />
                       </div>
                     )}
