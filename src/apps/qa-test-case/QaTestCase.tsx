@@ -383,7 +383,7 @@ export default function QaTestCase() {
                       </div>
 
                       {/* Send Button */}
-                      {prompt.trim() && (
+                      {prompt.trim() && !isLoading && (
                         <Button
                           onClick={handleSubmit}
                           size="sm"
@@ -391,6 +391,13 @@ export default function QaTestCase() {
                         >
                           <Send className="h-3 w-3" />
                         </Button>
+                      )}
+
+                      {/* Loading indicator in input */}
+                      {isLoading && (
+                        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full h-8 w-8 flex items-center justify-center">
+                          <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                        </div>
                       )}
                     </div>
                   </div>
