@@ -55,25 +55,29 @@ const mockChatHistory = [
     id: "1",
     title: "Authentication Test Cases",
     timestamp: "2 hours ago",
-    preview: "Generated 18 comprehensive test cases for login functionality with Google OAuth..."
+    preview:
+      "Generated 18 comprehensive test cases for login functionality with Google OAuth...",
   },
   {
     id: "2",
     title: "API Testing Scenarios",
     timestamp: "1 day ago",
-    preview: "Created 25 REST API test cases for user management endpoints including validation..."
+    preview:
+      "Created 25 REST API test cases for user management endpoints including validation...",
   },
   {
     id: "3",
     title: "Checkout Flow Tests",
     timestamp: "2 days ago",
-    preview: "Generated 32 end-to-end test scenarios for e-commerce checkout process..."
+    preview:
+      "Generated 32 end-to-end test scenarios for e-commerce checkout process...",
   },
   {
     id: "4",
     title: "Performance Testing",
     timestamp: "1 week ago",
-    preview: "Created 15 load testing scenarios for high-traffic scenarios and edge cases..."
+    preview:
+      "Created 15 load testing scenarios for high-traffic scenarios and edge cases...",
   },
 ];
 
@@ -86,7 +90,16 @@ export default function QaTestCase() {
   const [prompt, setPrompt] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{id: string, content: string, type: 'user' | 'assistant', timestamp: Date, csvData?: CSVRow[], csvHeaders?: any[]}>>([]);
+  const [messages, setMessages] = useState<
+    Array<{
+      id: string;
+      content: string;
+      type: "user" | "assistant";
+      timestamp: Date;
+      csvData?: CSVRow[];
+      csvHeaders?: any[];
+    }>
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentCsvData, setCurrentCsvData] = useState<CSVRow[]>([]);
   const [currentCsvHeaders, setCurrentCsvHeaders] = useState<any[]>([]);
@@ -97,29 +110,34 @@ export default function QaTestCase() {
 
   const parseCSVData = (csvString: string) => {
     // Remove the markdown code block wrapper
-    const cleanCsv = csvString.replace(/```csv\n?/g, '').replace(/```\n?/g, '').trim();
+    const cleanCsv = csvString
+      .replace(/```csv\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
 
-    const lines = cleanCsv.split('\n');
+    const lines = cleanCsv.split("\n");
     if (lines.length < 2) return { data: [], headers: [] };
 
-    const headers = lines[0].split(',').map(header => header.replace(/"/g, '').trim());
-    const csvHeaders = headers.map(header => ({
+    const headers = lines[0]
+      .split(",")
+      .map((header) => header.replace(/"/g, "").trim());
+    const csvHeaders = headers.map((header) => ({
       label: header,
-      key: header.toLowerCase().replace(/\s+/g, '_')
+      key: header.toLowerCase().replace(/\s+/g, "_"),
     }));
 
-    const data = lines.slice(1).map(line => {
+    const data = lines.slice(1).map((line) => {
       const values = [];
-      let current = '';
+      let current = "";
       let inQuotes = false;
 
       for (let i = 0; i < line.length; i++) {
         const char = line[i];
         if (char === '"') {
           inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
+        } else if (char === "," && !inQuotes) {
           values.push(current.trim());
-          current = '';
+          current = "";
         } else {
           current += char;
         }
@@ -128,8 +146,8 @@ export default function QaTestCase() {
 
       const row: CSVRow = {};
       headers.forEach((header, index) => {
-        const key = header.toLowerCase().replace(/\s+/g, '_');
-        row[key] = values[index]?.replace(/"/g, '') || '';
+        const key = header.toLowerCase().replace(/\s+/g, "_");
+        row[key] = values[index]?.replace(/"/g, "") || "";
       });
 
       return row;
@@ -138,22 +156,25 @@ export default function QaTestCase() {
     return { data, headers: csvHeaders };
   };
 
-
   const callQAAPI = async (userPrompt: string, files: File[]) => {
     const formData = new FormData();
-    formData.append('prompt', userPrompt);
+    formData.append("prompt", userPrompt);
 
-    files.forEach(file => {
-      formData.append('files', file);
+    files.forEach((file) => {
+      formData.append("files", file);
     });
 
-    const response = await axios.post('http://35.241.31.6:80/api/qa/generate', formData, {
-      headers: {
-        'Authorization': 'Bearer jasgdfiashH5HuRGhjgsdfhldsKGaif7abfk',
-        'Content-Type': 'multipart/form-data',
+    const response = await axios.post(
+      "http://35.241.31.6:80/api/qa/generate",
+      formData,
+      {
+        headers: {
+          Authorization: "Bearer jasgdfiashH5HuRGhjgsdfhldsKGaif7abfk",
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 30000, // 30 second timeout
       },
-      timeout: 30000, // 30 second timeout
-    });
+    );
 
     const result = response.data;
 
@@ -161,18 +182,18 @@ export default function QaTestCase() {
       const parsedData = parseCSVData(result.data);
       return { ...parsedData };
     } else {
-      throw new Error('Invalid response format from API');
+      throw new Error("Invalid response format from API");
     }
   };
 
   const handleFileAttach = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
+    const input = document.createElement("input");
+    input.type = "file";
     input.multiple = true;
-    input.accept = '.pdf,.doc,.docx,.txt,.csv,.xlsx';
+    input.accept = ".pdf,.doc,.docx,.txt,.csv,.xlsx";
     input.onchange = (e) => {
       const files = Array.from((e.target as HTMLInputElement).files || []);
-      setSelectedFiles(prev => [...prev, ...files]);
+      setSelectedFiles((prev) => [...prev, ...files]);
     };
     input.click();
   };
@@ -183,11 +204,11 @@ export default function QaTestCase() {
     const userMessage = {
       id: Date.now().toString(),
       content: prompt,
-      type: 'user' as const,
-      timestamp: new Date()
+      type: "user" as const,
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
     const currentPrompt = prompt;
@@ -199,7 +220,8 @@ export default function QaTestCase() {
     try {
       toast({
         title: "🔄 Generating Test Cases",
-        description: "Processing your request and generating comprehensive test cases...",
+        description:
+          "Processing your request and generating comprehensive test cases...",
         className: "bg-blue-50 border-blue-200 text-blue-800",
       });
 
@@ -211,30 +233,30 @@ export default function QaTestCase() {
       const aiResponse = {
         id: (Date.now() + 1).toString(),
         content: `Generated ${data.length} test cases successfully! You can view them in the table below or download as CSV.`,
-        type: 'assistant' as const,
+        type: "assistant" as const,
         timestamp: new Date(),
         csvData: data,
-        csvHeaders: headers
+        csvHeaders: headers,
       };
 
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages((prev) => [...prev, aiResponse]);
 
       toast({
         title: "�� Test Cases Generated",
         description: `Successfully generated ${data.length} test cases. View or download below.`,
         className: "bg-green-50 border-green-200 text-green-800",
       });
-
     } catch (error) {
-      console.error('Failed to generate test cases:', error);
+      console.error("Failed to generate test cases:", error);
 
-      let errorMessage = 'Unknown error occurred';
+      let errorMessage = "Unknown error occurred";
 
       if (axios.isAxiosError(error)) {
-        if (error.code === 'ERR_NETWORK') {
-          errorMessage = 'Network error: Unable to connect to the API server';
-        } else if (error.code === 'ECONNABORTED') {
-          errorMessage = 'Request timeout: The API server took too long to respond';
+        if (error.code === "ERR_NETWORK") {
+          errorMessage = "Network error: Unable to connect to the API server";
+        } else if (error.code === "ECONNABORTED") {
+          errorMessage =
+            "Request timeout: The API server took too long to respond";
         } else if (error.response) {
           errorMessage = `API Error (${error.response.status}): ${error.response.data?.message || error.response.statusText}`;
         } else {
@@ -247,11 +269,11 @@ export default function QaTestCase() {
       const errorResponse = {
         id: (Date.now() + 1).toString(),
         content: `Failed to generate test cases. Error: ${errorMessage}`,
-        type: 'assistant' as const,
-        timestamp: new Date()
+        type: "assistant" as const,
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, errorResponse]);
+      setMessages((prev) => [...prev, errorResponse]);
 
       toast({
         title: "❌ API Error",
@@ -264,23 +286,24 @@ export default function QaTestCase() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
   };
 
   const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div className="flex h-full relative -m-6 bg-background dark:bg-slate-900">
       {/* Main Content */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${
-        isRightSidebarOpen ? 'mr-80' : 'mr-0'
-      }`}>
-
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 ${
+          isRightSidebarOpen ? "mr-80" : "mr-0"
+        }`}
+      >
         {/* Chat History Toggle - Minimal */}
         <div className="absolute top-4 right-4 z-10">
           <Button
@@ -349,7 +372,10 @@ export default function QaTestCase() {
                         </Button>
 
                         {/* Templates Dropdown */}
-                        <Select onValueChange={handlePromptSelect} disabled={isLoading}>
+                        <Select
+                          onValueChange={handlePromptSelect}
+                          disabled={isLoading}
+                        >
                           <SelectTrigger className="border-0 bg-transparent shadow-none h-auto p-0 mr-3 w-auto hover:bg-muted rounded-md">
                             <div className="flex items-center gap-1 px-2 py-1">
                               <Sparkles className="h-4 w-4" />
@@ -359,7 +385,9 @@ export default function QaTestCase() {
                           <SelectContent>
                             {predefinedPrompts.map((promptText, index) => (
                               <SelectItem key={index} value={promptText}>
-                                {promptText.length > 50 ? `${promptText.slice(0, 50)}...` : promptText}
+                                {promptText.length > 50
+                                  ? `${promptText.slice(0, 50)}...`
+                                  : promptText}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -370,7 +398,11 @@ export default function QaTestCase() {
                           value={prompt}
                           onChange={(e) => setPrompt(e.target.value)}
                           onKeyPress={handleKeyPress}
-                          placeholder={isLoading ? "Generating test cases..." : "Enter a prompt for QA Test Case Generator"}
+                          placeholder={
+                            isLoading
+                              ? "Generating test cases..."
+                              : "Enter a prompt for QA Test Case Generator"
+                          }
                           className="flex-1 bg-transparent border-0 outline-none text-foreground placeholder:text-muted-foreground text-base"
                           disabled={isLoading}
                         />
@@ -420,7 +452,10 @@ export default function QaTestCase() {
 
                 {/* Subtle Feature Hints */}
                 <div className="text-xs text-muted-foreground space-y-2">
-                  <p>Generate test cases • Upload requirements • Create QA documentation</p>
+                  <p>
+                    Generate test cases • Upload requirements • Create QA
+                    documentation
+                  </p>
                 </div>
               </div>
             ) : (
@@ -429,16 +464,18 @@ export default function QaTestCase() {
                 {messages.map((message) => (
                   <div key={message.id} className="space-y-4">
                     <div
-                      className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
                         className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                          message.type === 'user'
-                            ? 'bg-primary text-primary-foreground ml-8'
-                            : 'bg-muted mr-8'
+                          message.type === "user"
+                            ? "bg-primary text-primary-foreground ml-8"
+                            : "bg-muted mr-8"
                         }`}
                       >
-                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        <p className="text-sm leading-relaxed">
+                          {message.content}
+                        </p>
                         <p className={`text-xs mt-2 opacity-70`}>
                           {message.timestamp.toLocaleTimeString()}
                         </p>
@@ -446,15 +483,17 @@ export default function QaTestCase() {
                     </div>
 
                     {/* CSV Table for assistant messages with CSV data */}
-                    {message.type === 'assistant' && message.csvData && message.csvHeaders && (
-                      <div className="w-full space-y-2">
-                        <CSVTable
-                          data={message.csvData}
-                          headers={message.csvHeaders}
-                          fileName={`qa-test-cases-${message.timestamp.getTime()}.csv`}
-                        />
-                      </div>
-                    )}
+                    {message.type === "assistant" &&
+                      message.csvData &&
+                      message.csvHeaders && (
+                        <div className="w-full space-y-2">
+                          <CSVTable
+                            data={message.csvData}
+                            headers={message.csvHeaders}
+                            fileName={`qa-test-cases-${message.timestamp.getTime()}.csv`}
+                          />
+                        </div>
+                      )}
                   </div>
                 ))}
 

@@ -15,14 +15,14 @@ interface CSVTableProps {
   fileName?: string;
 }
 
-const CSVTable: React.FC<CSVTableProps> = ({ 
-  data, 
-  headers, 
-  fileName = "qa-test-cases.csv" 
+const CSVTable: React.FC<CSVTableProps> = ({
+  data,
+  headers,
+  fileName = "qa-test-cases.csv",
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [visibleColumns, setVisibleColumns] = React.useState<Set<string>>(
-    new Set(headers.slice(0, 4).map(h => h.key)) // Show first 4 columns by default
+    new Set(headers.slice(0, 4).map((h) => h.key)), // Show first 4 columns by default
   );
 
   const toggleColumn = (columnKey: string) => {
@@ -35,34 +35,42 @@ const CSVTable: React.FC<CSVTableProps> = ({
     setVisibleColumns(newVisible);
   };
 
-  const visibleHeaders = headers.filter(h => visibleColumns.has(h.key));
+  const visibleHeaders = headers.filter((h) => visibleColumns.has(h.key));
 
   const getPriorityColor = (priority: string) => {
     switch (priority?.toLowerCase()) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
-      case 'to do': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'in progress': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'done': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "to do":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "in progress":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case "done":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const renderCellContent = (value: string, headerKey: string) => {
-    if (headerKey === 'priority') {
+    if (headerKey === "priority") {
       return <Badge className={getPriorityColor(value)}>{value}</Badge>;
     }
-    if (headerKey === 'status') {
+    if (headerKey === "status") {
       return <Badge className={getStatusColor(value)}>{value}</Badge>;
     }
-    if (headerKey === 'test_steps' && value.length > 100) {
+    if (headerKey === "test_steps" && value.length > 100) {
       return (
         <div className="max-w-xs">
           <p className="truncate">{value}</p>
@@ -96,11 +104,11 @@ const CSVTable: React.FC<CSVTableProps> = ({
             </CSVLink>
           </div>
         </div>
-        
+
         {/* Column Visibility Controls */}
         <div className="flex flex-wrap gap-1 mt-3">
           <span className="text-xs text-muted-foreground mr-2">Columns:</span>
-          {headers.map(header => (
+          {headers.map((header) => (
             <Button
               key={header.key}
               variant={visibleColumns.has(header.key) ? "default" : "outline"}
@@ -124,7 +132,7 @@ const CSVTable: React.FC<CSVTableProps> = ({
           <table className="w-full border-collapse border border-gray-200 rounded-lg">
             <thead>
               <tr className="bg-muted">
-                {visibleHeaders.map(header => (
+                {visibleHeaders.map((header) => (
                   <th
                     key={header.key}
                     className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900"
@@ -135,18 +143,20 @@ const CSVTable: React.FC<CSVTableProps> = ({
               </tr>
             </thead>
             <tbody>
-              {data.slice(0, isExpanded ? data.length : 10).map((row, index) => (
-                <tr key={index} className="hover:bg-muted/50">
-                  {visibleHeaders.map(header => (
-                    <td
-                      key={header.key}
-                      className="border border-gray-200 px-4 py-3 text-sm max-w-xs"
-                    >
-                      {renderCellContent(row[header.key] || '', header.key)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {data
+                .slice(0, isExpanded ? data.length : 10)
+                .map((row, index) => (
+                  <tr key={index} className="hover:bg-muted/50">
+                    {visibleHeaders.map((header) => (
+                      <td
+                        key={header.key}
+                        className="border border-gray-200 px-4 py-3 text-sm max-w-xs"
+                      >
+                        {renderCellContent(row[header.key] || "", header.key)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -158,7 +168,7 @@ const CSVTable: React.FC<CSVTableProps> = ({
               onClick={() => setIsExpanded(!isExpanded)}
               className="text-sm"
             >
-              {isExpanded ? 'Show Less' : `Show All ${data.length} Test Cases`}
+              {isExpanded ? "Show Less" : `Show All ${data.length} Test Cases`}
             </Button>
           </div>
         )}

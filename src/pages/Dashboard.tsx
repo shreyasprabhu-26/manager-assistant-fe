@@ -247,7 +247,7 @@ export default function Dashboard() {
                 );
               })}
             </div>
-            
+
             {/* Future Apps */}
             <Card className="card-gradient mt-6">
               <CardHeader>
@@ -382,8 +382,6 @@ export default function Dashboard() {
               </div>
             </CardContent>
           </Card>
-
-
         </div>
       </div>
 
