@@ -163,20 +163,15 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
     });
 
     try {
-      const response = await fetch('http://35.241.31.6:80/api/qa/generate', {
-        method: 'POST',
-        body: formData,
-        mode: 'cors', // Explicitly set CORS mode
+      const response = await axios.post('http://35.241.31.6:80/api/qa/generate', formData, {
         headers: {
-          // Don't set Content-Type for FormData, let browser set it
+          'Authorization': 'Bearer jasgdfiashH5HuRGhjgsdfhldsKGaif7abfk',
+          'Content-Type': 'multipart/form-data',
         },
+        timeout: 30000, // 30 second timeout
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
+      const result = response.data;
 
       if (result.success && result.data) {
         const parsedData = parseCSVData(result.data);
@@ -188,7 +183,7 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
       console.warn('API call failed, using mock data:', error);
 
       // Check if it's a CORS or network error
-      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      if (axios.isAxiosError(error) && (error.code === 'ERR_NETWORK' || error.message.includes('CORS') || error.code === 'ECONNABORTED')) {
         toast({
           title: "⚠️ Using Mock Data",
           description: "API unavailable due to CORS/network issues. Using sample test cases.",
