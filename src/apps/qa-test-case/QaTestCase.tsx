@@ -330,12 +330,13 @@ export default function QaTestCase() {
                           variant="ghost"
                           size="sm"
                           className="rounded-full h-8 w-8 p-0 mr-3 hover:bg-muted"
+                          disabled={isLoading}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
 
                         {/* Templates Dropdown */}
-                        <Select onValueChange={handlePromptSelect}>
+                        <Select onValueChange={handlePromptSelect} disabled={isLoading}>
                           <SelectTrigger className="border-0 bg-transparent shadow-none h-auto p-0 mr-3 w-auto hover:bg-muted rounded-md">
                             <div className="flex items-center gap-1 px-2 py-1">
                               <Sparkles className="h-4 w-4" />
@@ -356,8 +357,9 @@ export default function QaTestCase() {
                           value={prompt}
                           onChange={(e) => setPrompt(e.target.value)}
                           onKeyPress={handleKeyPress}
-                          placeholder="Enter a prompt for QA Test Case Generator"
+                          placeholder={isLoading ? "Generating test cases..." : "Enter a prompt for QA Test Case Generator"}
                           className="flex-1 bg-transparent border-0 outline-none text-foreground placeholder:text-muted-foreground text-base"
+                          disabled={isLoading}
                         />
 
                         {/* Mic Icon */}
