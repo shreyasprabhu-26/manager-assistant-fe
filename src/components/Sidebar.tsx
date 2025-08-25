@@ -126,6 +126,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="border-t p-4">
             <div className="flex items-center space-x-3">
               {user?.avatar ? (
+                <img 
+                  src={user.avatar} 
                 <img
                   src={user.avatar}
                   alt={`${user.name}'s avatar`}
@@ -134,6 +136,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               ) : (
                 <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center shadow-lg">
                   <span className="text-xs font-bold text-white">
+                    {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
                     {user?.name
                       ?.split(" ")
                       .map((n) => n[0])
