@@ -179,30 +179,74 @@ export default function QaTestCase() {
     input.click();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!prompt.trim()) return;
 
-    const newMessage = {
+    const userMessage = {
       id: Date.now().toString(),
       content: prompt,
       type: 'user' as const,
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, newMessage]);
+    setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
+
+    const currentPrompt = prompt;
+    const currentFiles = [...selectedFiles];
+
     setPrompt("");
     setSelectedFiles([]);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      toast({
+        title: "🔄 Generating Test Cases",
+        description: "Processing your request and generating comprehensive test cases...",
+        className: "bg-blue-50 border-blue-200 text-blue-800",
+      });
+
+      const { data, headers } = await callQAAPI(currentPrompt, currentFiles);
+
+      setCurrentCsvData(data);
+      setCurrentCsvHeaders(headers);
+
       const aiResponse = {
         id: (Date.now() + 1).toString(),
-        content: `I'll help you generate test cases for: "${prompt}". Here are some comprehensive test scenarios based on your request...`,
+        content: `Generated ${data.length} test cases successfully! You can view them in the table below or download as CSV.`,
+        type: 'assistant' as const,
+        timestamp: new Date(),
+        csvData: data,
+        csvHeaders: headers
+      };
+
+      setMessages(prev => [...prev, aiResponse]);
+
+      toast({
+        title: "✅ Test Cases Generated",
+        description: `Successfully generated ${data.length} test cases. View or download below.`,
+        className: "bg-green-50 border-green-200 text-green-800",
+      });
+
+    } catch (error) {
+      console.error('Failed to generate test cases:', error);
+
+      const errorResponse = {
+        id: (Date.now() + 1).toString(),
+        content: `Sorry, I encountered an error while generating test cases: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
         type: 'assistant' as const,
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, aiResponse]);
-    }, 1000);
+
+      setMessages(prev => [...prev, errorResponse]);
+
+      toast({
+        title: "❌ Error",
+        description: "Failed to generate test cases. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
