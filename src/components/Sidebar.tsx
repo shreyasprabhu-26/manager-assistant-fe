@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { mockApps } from '@/data/mockApps';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Home, FileText, FileCode, X, Zap, Sparkles } from 'lucide-react';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { mockApps } from "@/data/mockApps";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Home, FileText, FileCode, X, Zap, Sparkles } from "lucide-react";
 
 const iconMap = {
   Home,
@@ -29,18 +29,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const navigation = [
     {
-      name: 'Dashboard',
-      href: '/dashboard',
-      icon: 'Home' as const,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-100 dark:bg-emerald-900/20',
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: "Home" as const,
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-100 dark:bg-emerald-900/20",
     },
-    ...availableApps.map(app => ({
+    ...availableApps.map((app) => ({
       name: app.name,
       href: app.route,
       icon: app.icon as keyof typeof iconMap,
       color: app.color,
-      bgColor: app.bgGradient.includes('blue') ? 'bg-blue-100 dark:bg-blue-900/20' : 'bg-purple-100 dark:bg-purple-900/20',
+      bgColor: app.bgGradient.includes("blue")
+        ? "bg-blue-100 dark:bg-blue-900/20"
+        : "bg-purple-100 dark:bg-purple-900/20",
     })),
   ];
 
@@ -57,8 +59,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-16 z-50 h-[calc(100vh-4rem)] w-64 transform border-r bg-background dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-transform duration-200 ease-in-out lg:relative lg:top-0 lg:h-[calc(100vh-4rem)] lg:translate-x-0',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          "fixed left-0 top-16 z-50 h-screen w-64 transform border-r bg-background dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-transform duration-200 ease-in-out lg:relative lg:top-0 lg:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         <div className="flex h-full flex-col">
@@ -81,11 +83,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <Button
                     key={item.href}
                     asChild
-                    variant={isActive ? 'secondary' : 'ghost'}
+                    variant={isActive ? "secondary" : "ghost"}
                     className={cn(
-                      'w-full justify-start group transition-all duration-200',
-                      isActive && 'bg-secondary text-secondary-foreground shadow-sm',
-                      !isActive && 'hover:bg-gradient-to-r hover:from-background hover:to-muted/50'
+                      "w-full justify-start group transition-all duration-200",
+                      isActive &&
+                        "bg-secondary text-secondary-foreground shadow-sm",
+                      !isActive &&
+                        "hover:bg-gradient-to-r hover:from-background hover:to-muted/50",
                     )}
                     onClick={() => {
                       // Close mobile sidebar when navigating
@@ -95,14 +99,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     }}
                   >
                     <Link to={item.href} className="flex items-center">
-                      <div className={cn(
-                        'mr-2 p-1 rounded-md transition-all duration-200',
-                        isActive ? item.bgColor : 'group-hover:bg-gradient-to-br group-hover:from-muted group-hover:to-accent/50'
-                      )}>
-                        <IconComponent className={cn(
-                          'h-4 w-4 transition-colors duration-200',
-                          isActive ? item.color : 'group-hover:text-primary'
-                        )} />
+                      <div
+                        className={cn(
+                          "mr-2 p-1 rounded-md transition-all duration-200",
+                          isActive
+                            ? item.bgColor
+                            : "group-hover:bg-gradient-to-br group-hover:from-muted group-hover:to-accent/50",
+                        )}
+                      >
+                        <IconComponent
+                          className={cn(
+                            "h-4 w-4 transition-colors duration-200",
+                            isActive ? item.color : "group-hover:text-primary",
+                          )}
+                        />
                       </div>
                       {item.name}
                     </Link>
@@ -118,6 +128,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               {user?.avatar ? (
                 <img 
                   src={user.avatar} 
+                <img
+                  src={user.avatar}
                   alt={`${user.name}'s avatar`}
                   className="w-8 h-8 rounded-full shadow-lg object-cover"
                 />
@@ -125,6 +137,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center shadow-lg">
                   <span className="text-xs font-bold text-white">
                     {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
+                    {user?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("") || "U"}
                   </span>
                 </div>
               )}
@@ -132,7 +148,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <p className="text-sm font-medium truncate">{user?.name}</p>
                 <div className="flex items-center space-x-1">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
+                  <p className="text-xs text-muted-foreground capitalize">
+                    {user?.role}
+                  </p>
                 </div>
               </div>
             </div>
