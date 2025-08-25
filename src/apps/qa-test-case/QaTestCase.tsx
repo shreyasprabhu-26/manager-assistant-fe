@@ -220,7 +220,7 @@ export default function QaTestCase() {
       setMessages(prev => [...prev, aiResponse]);
 
       toast({
-        title: "✅ Test Cases Generated",
+        title: "�� Test Cases Generated",
         description: `Successfully generated ${data.length} test cases. View or download below.`,
         className: "bg-green-50 border-green-200 text-green-800",
       });
@@ -421,15 +421,6 @@ export default function QaTestCase() {
                 {/* Subtle Feature Hints */}
                 <div className="text-xs text-muted-foreground space-y-2">
                   <p>Generate test cases • Upload requirements • Create QA documentation</p>
-                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-blue-800 dark:text-blue-200">
-                    <div className="flex items-start gap-2">
-                      <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                      <div className="text-xs">
-                        <p className="font-medium mb-1">API Integration Status:</p>
-                        <p>Connected to QA API. Requires proper authentication and network connectivity to function.</p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             ) : (
