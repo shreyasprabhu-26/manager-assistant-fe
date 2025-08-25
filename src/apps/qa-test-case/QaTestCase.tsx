@@ -473,11 +473,20 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
 
                     {/* CSV Table for assistant messages with CSV data */}
                     {message.type === 'assistant' && message.csvData && message.csvHeaders && (
-                      <div className="w-full">
+                      <div className="w-full space-y-2">
+                        {message.isMockData && (
+                          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-800">
+                            <div className="flex items-center gap-2">
+                              <AlertCircle className="h-4 w-4" />
+                              <span className="font-medium">Mock Data Notice:</span>
+                              <span>These are sample test cases. Real API unavailable due to CORS/network issues.</span>
+                            </div>
+                          </div>
+                        )}
                         <CSVTable
                           data={message.csvData}
                           headers={message.csvHeaders}
-                          fileName={`qa-test-cases-${message.timestamp.getTime()}.csv`}
+                          fileName={`qa-test-cases-${message.isMockData ? 'mock-' : ''}${message.timestamp.getTime()}.csv`}
                         />
                       </div>
                     )}
