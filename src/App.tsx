@@ -1,5 +1,5 @@
 import "./global.css";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Toaster } from "@/components/ui/toaster";
 import { createRoot } from "react-dom/client";
@@ -7,11 +7,15 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // Providers
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ManagerAssistantProvider } from "@/contexts/ManagerAssistantContext";
+
+// Services
+import { setupApiInterceptors } from "@/services/apiService";
 
 // Components
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -95,5 +99,70 @@ const App = () => (
     </ThemeProvider>
   </QueryClientProvider>
 );
+
+// Google OAuth client ID from environment variables
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID || "your-google-client-id";
+
+const App = () => {
+  // Set up axios interceptors
+  useEffect(() => {
+    setupApiInterceptors();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="system" storageKey="manager-assistant-theme">
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <BrowserRouter>
+            <AuthProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  {/* Protected routes */}
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/manager-assist"
+                    element={
+                      <ProtectedRoute>
+                        <ManagerAssist />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/sow-to-hld"
+                    element={
+                      <ProtectedRoute>
+                        <SowToHld />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </TooltipProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </GoogleOAuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 createRoot(document.getElementById("root")!).render(<App />);
