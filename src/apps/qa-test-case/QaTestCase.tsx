@@ -93,6 +93,80 @@ export default function QaTestCase() {
     setPrompt(selectedPrompt);
   };
 
+  const parseCSVData = (csvString: string) => {
+    // Remove the markdown code block wrapper
+    const cleanCsv = csvString.replace(/```csv\n?/g, '').replace(/```\n?/g, '').trim();
+
+    const lines = cleanCsv.split('\n');
+    if (lines.length < 2) return { data: [], headers: [] };
+
+    const headers = lines[0].split(',').map(header => header.replace(/"/g, '').trim());
+    const csvHeaders = headers.map(header => ({
+      label: header,
+      key: header.toLowerCase().replace(/\s+/g, '_')
+    }));
+
+    const data = lines.slice(1).map(line => {
+      const values = [];
+      let current = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          values.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      values.push(current.trim());
+
+      const row: CSVRow = {};
+      headers.forEach((header, index) => {
+        const key = header.toLowerCase().replace(/\s+/g, '_');
+        row[key] = values[index]?.replace(/"/g, '') || '';
+      });
+
+      return row;
+    });
+
+    return { data, headers: csvHeaders };
+  };
+
+  const callQAAPI = async (userPrompt: string, files: File[]) => {
+    const formData = new FormData();
+    formData.append('prompt', userPrompt);
+
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+
+    try {
+      const response = await fetch('http://35.241.31.6:80/api/qa/generate', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        return parseCSVData(result.data);
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error) {
+      console.error('API call failed:', error);
+      throw error;
+    }
+  };
+
   const handleFileAttach = () => {
     const input = document.createElement('input');
     input.type = 'file';
