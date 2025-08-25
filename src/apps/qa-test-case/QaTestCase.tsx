@@ -48,31 +48,31 @@ const predefinedPrompts = [
   "Generate edge case test scenarios",
 ];
 
-// Mock chat history
+// Mock chat history - this would be populated from actual conversations
 const mockChatHistory = [
   {
     id: "1",
     title: "Authentication Test Cases",
     timestamp: "2 hours ago",
-    preview: "Generated comprehensive test cases for login functionality..."
+    preview: "Generated 18 comprehensive test cases for login functionality with Google OAuth..."
   },
   {
-    id: "2", 
+    id: "2",
     title: "API Testing Scenarios",
     timestamp: "1 day ago",
-    preview: "Created REST API test cases for user management endpoints..."
+    preview: "Created 25 REST API test cases for user management endpoints including validation..."
   },
   {
     id: "3",
     title: "Checkout Flow Tests",
-    timestamp: "2 days ago", 
-    preview: "Generated end-to-end test scenarios for e-commerce checkout..."
+    timestamp: "2 days ago",
+    preview: "Generated 32 end-to-end test scenarios for e-commerce checkout process..."
   },
   {
     id: "4",
     title: "Performance Testing",
     timestamp: "1 week ago",
-    preview: "Created load testing scenarios for high-traffic scenarios..."
+    preview: "Created 15 load testing scenarios for high-traffic scenarios and edge cases..."
   },
 ];
 
