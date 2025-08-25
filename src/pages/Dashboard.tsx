@@ -49,12 +49,8 @@ const iconMap = {
 export default function Dashboard() {
   const { user } = useAuth();
 
-  // Filter apps based on user permissions
-  const availableApps = mockApps.filter((app) =>
-    app.permissions.some((permission) =>
-      user?.permissions.includes(permission),
-    ),
-  );
+  // Show all apps without permission filtering
+  const availableApps = mockApps;
 
   return (
     <div className="space-y-8">

@@ -24,12 +24,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { user } = useAuth();
   const location = useLocation();
 
-  // Filter apps based on user permissions
-  const availableApps = mockApps.filter((app) =>
-    app.permissions.some((permission) =>
-      user?.permissions.includes(permission),
-    ),
-  );
+  // Show all apps without permission filtering
+  const availableApps = mockApps;
 
   const navigation = [
     {
@@ -129,14 +125,22 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* User info at bottom */}
           <div className="border-t p-4">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-xs font-bold text-white">
-                  {user?.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("") || "U"}
-                </span>
-              </div>
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={`${user.name}'s avatar`}
+                  className="w-8 h-8 rounded-full shadow-lg object-cover"
+                />
+              ) : (
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-xs font-bold text-white">
+                    {user?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("") || "U"}
+                  </span>
+                </div>
+              )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{user?.name}</p>
                 <div className="flex items-center space-x-1">
