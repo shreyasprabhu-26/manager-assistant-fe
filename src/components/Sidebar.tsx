@@ -5,7 +5,7 @@ import { mockApps } from "@/data/mockApps";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Home, FileText, FileCode, X, Zap, Sparkles } from "lucide-react";
+import { Home, FileText, FileCode, X, Zap, Sparkles, CheckSquare } from "lucide-react";
 
 const iconMap = {
   Home,
@@ -13,6 +13,7 @@ const iconMap = {
   FileCode,
   Zap,
   Sparkles,
+  CheckSquare,
 };
 
 interface SidebarProps {
@@ -42,6 +43,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       color: app.color,
       bgColor: app.bgGradient.includes("blue")
         ? "bg-blue-100 dark:bg-blue-900/20"
+        : app.bgGradient.includes("green")
+        ? "bg-green-100 dark:bg-green-900/20"
         : "bg-purple-100 dark:bg-purple-900/20",
     })),
   ];

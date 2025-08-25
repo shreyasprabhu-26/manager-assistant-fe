@@ -41,6 +41,17 @@ export const mockApps: MicroApp[] = [
     category: 'Documentation',
     color: 'text-purple-600',
     bgGradient: 'from-purple-500/10 to-pink-500/10'
+  },
+  {
+    id: 'qa-test-case',
+    name: 'QA Test Case',
+    description: 'Generate comprehensive test cases and QA documentation using AI assistance.',
+    route: '/qa-test-case',
+    icon: 'CheckSquare',
+    permissions: ['manager', 'admin', 'qa', 'tester'],
+    category: 'Quality Assurance',
+    color: 'text-green-600',
+    bgGradient: 'from-green-500/10 to-emerald-500/10'
   }
 ];
 
@@ -50,5 +61,5 @@ export const mockUser: User = {
   email: 'sarah.johnson@company.com',
   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=150&h=150&fit=crop&crop=face',
   role: 'manager',
-  permissions: ['manager', 'admin']
+  permissions: ['manager', 'admin', 'qa', 'tester']
 };

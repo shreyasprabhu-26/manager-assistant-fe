@@ -1,16 +1,16 @@
-import React from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { useTheme } from '@/hooks/useTheme';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Moon, Sun, Menu, LogOut, Settings, User } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Moon, Sun, Menu, LogOut, Settings, User } from "lucide-react";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -21,7 +21,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
@@ -53,7 +53,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
             onClick={toggleTheme}
             className="h-9 w-9 px-0 hover:bg-gradient-to-r hover:from-yellow-100 hover:to-blue-100 dark:hover:from-yellow-900/20 dark:hover:to-blue-900/20 transition-all duration-300"
           >
-            {theme === 'light' ? (
+            {theme === "light" ? (
               <Moon className="h-4 w-4 text-blue-600 hover:text-blue-700" />
             ) : (
               <Sun className="h-4 w-4 text-yellow-500 hover:text-yellow-600" />
@@ -66,7 +66,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user?.avatar} alt={user?.name} />
                   <AvatarFallback>
-                    {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
+                    {user?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("") || "U"}
                   </AvatarFallback>
                 </Avatar>
               </Button>

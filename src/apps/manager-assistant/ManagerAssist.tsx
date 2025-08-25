@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -20,8 +21,18 @@ import {
   Clock,
   ChevronRight,
 } from "lucide-react";
+import { useManagerAssistant } from "@/contexts/ManagerAssistantContext";
 
 export default function ManagerAssist() {
+  const navigate = useNavigate();
+  const { createProject } = useManagerAssistant();
+
+  const handleNewProject = () => {
+    // Create a new project with temporary data and redirect
+    const projectId = createProject("", "");
+    navigate(`/manager-assist/${projectId}`);
+  };
+
   // Mock project data
   const projects = [
     {
@@ -76,7 +87,10 @@ export default function ManagerAssist() {
               <span>Filter</span>
             </Button>
           </div>
-          <Button className="bg-primary text-primary-foreground flex items-center space-x-1 ml-2">
+          <Button
+            onClick={handleNewProject}
+            className="bg-primary text-primary-foreground flex items-center space-x-1 ml-2"
+          >
             <Plus className="h-4 w-4" />
             <span>New Project</span>
           </Button>
@@ -176,6 +190,7 @@ export default function ManagerAssist() {
                     variant="secondary"
                     size="sm"
                     className="flex items-center gap-1"
+                    onClick={() => navigate(`/manager-assist/${project.id}`)}
                   >
                     <span>Details</span>
                     <ChevronRight className="h-3 w-3" />
