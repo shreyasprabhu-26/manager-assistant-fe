@@ -16,6 +16,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { CSVLink } from "react-csv";
 import {
   CheckSquare,
   Plus,
@@ -25,6 +27,9 @@ import {
   MessageSquare,
   ChevronRight,
   ChevronLeft,
+  Download,
+  Table,
+  AlertCircle,
 } from "lucide-react";
 import ChatSidebar from "./components/ChatSidebar";
 
