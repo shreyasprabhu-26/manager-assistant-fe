@@ -32,6 +32,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import ChatSidebar from "./components/ChatSidebar";
+import CSVTable from "./components/CSVTable";
 
 // Mock data for pre-existing prompts
 const predefinedPrompts = [
