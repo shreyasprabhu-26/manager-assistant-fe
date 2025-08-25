@@ -243,26 +243,28 @@ TC_QA_005,${userPrompt},Mock Document,Verify performance under load,1. Simulate 
         className: "bg-blue-50 border-blue-200 text-blue-800",
       });
 
-      const { data, headers } = await callQAAPI(currentPrompt, currentFiles);
+      const { data, headers, isMockData } = await callQAAPI(currentPrompt, currentFiles);
 
       setCurrentCsvData(data);
       setCurrentCsvHeaders(headers);
+      setLastResponseWasMock(isMockData || false);
 
       const aiResponse = {
         id: (Date.now() + 1).toString(),
-        content: `Generated ${data.length} test cases successfully! You can view them in the table below or download as CSV.`,
+        content: `Generated ${data.length} test cases successfully! ${isMockData ? '(Using mock data - API unavailable)' : ''} You can view them in the table below or download as CSV.`,
         type: 'assistant' as const,
         timestamp: new Date(),
         csvData: data,
-        csvHeaders: headers
+        csvHeaders: headers,
+        isMockData: isMockData
       };
 
       setMessages(prev => [...prev, aiResponse]);
 
       toast({
-        title: "✅ Test Cases Generated",
-        description: `Successfully generated ${data.length} test cases. View or download below.`,
-        className: "bg-green-50 border-green-200 text-green-800",
+        title: isMockData ? "✅ Mock Test Cases Generated" : "✅ Test Cases Generated",
+        description: `Successfully generated ${data.length} test cases. ${isMockData ? 'Using sample data due to API issues.' : 'View or download below.'}`,
+        className: isMockData ? "bg-yellow-50 border-yellow-200 text-yellow-800" : "bg-green-50 border-green-200 text-green-800",
       });
 
     } catch (error) {
