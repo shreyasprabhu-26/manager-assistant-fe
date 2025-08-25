@@ -75,11 +75,19 @@ const mockChatHistory = [
   },
 ];
 
+interface CSVRow {
+  [key: string]: string;
+}
+
 export default function QaTestCase() {
+  const { toast } = useToast();
   const [prompt, setPrompt] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{id: string, content: string, type: 'user' | 'assistant', timestamp: Date}>>([]);
+  const [messages, setMessages] = useState<Array<{id: string, content: string, type: 'user' | 'assistant', timestamp: Date, csvData?: CSVRow[], csvHeaders?: any[]}>>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentCsvData, setCurrentCsvData] = useState<CSVRow[]>([]);
+  const [currentCsvHeaders, setCurrentCsvHeaders] = useState<any[]>([]);
 
   const handlePromptSelect = (selectedPrompt: string) => {
     setPrompt(selectedPrompt);
